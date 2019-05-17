@@ -5,15 +5,26 @@ package avcodec
 
 //#cgo pkg-config: libavcodec
 //#include <libavcodec/avcodec.h>
+//#include <libavutil/mathematics.h>
 import "C"
 import (
 	"unsafe"
+)
+
+type (
+	Rounding C.enum_AVRounding
 )
 
 const (
 	AV_PKT_FLAG_KEY     = int(C.AV_PKT_FLAG_KEY)
 	AV_PKT_FLAG_CORRUPT = int(C.AV_PKT_FLAG_CORRUPT)
 	AV_PKT_FLAG_DISCARD = int(C.AV_PKT_FLAG_DISCARD)
+
+	AV_ROUND_ZERO        = int(C.AV_ROUND_ZERO)
+	AV_ROUND_NEAR_INF    = int(C.AV_ROUND_NEAR_INF)
+	AV_ROUND_DOWN        = int(C.AV_ROUND_DOWN)
+	AV_ROUND_UP          = int(C.AV_ROUND_UP)
+	AV_ROUND_PASS_MINMAX = int(C.AV_ROUND_PASS_MINMAX)
 )
 
 //Initialize optional fields of a packet with default values.
@@ -120,4 +131,14 @@ func (p *Packet) AvPacketCopyProps(s *Packet) int {
 //Convert valid timing fields (timestamps / durations) in a packet from one timebase to another.
 func (p *Packet) AvPacketRescaleTs(r, r2 Rational) {
 	C.av_packet_rescale_ts((*C.struct_AVPacket)(p), (C.struct_AVRational)(r), (C.struct_AVRational)(r2))
+}
+
+//Rescale a 64-bit integer by 2 rational numbers with specified rounding.
+func AvRescaleQRnd(a int64, r Rational, r2 Rational, rnd int) int64 {
+	return int64(C.av_rescale_q_rnd(C.int64_t(a), (C.struct_AVRational)(r), (C.struct_AVRational)(r2), (C.enum_AVRounding)(rnd)))
+}
+
+//Rescales a 64-bit integer by 2 rational numbers.
+func AvRescaleQ(a int64, r Rational, r2 Rational) int64 {
+	return int64(C.av_rescale_q(C.int64_t(a), (C.struct_AVRational)(r), (C.struct_AVRational)(r2)))
 }

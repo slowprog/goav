@@ -3,6 +3,9 @@
 
 package avcodec
 
+//#include <stdlib.h>
+import "C"
+
 func (ctxt *Context) ActiveThreadType() int {
 	return int(ctxt.active_thread_type)
 }
@@ -121,6 +124,10 @@ func (ctxt *Context) ExtradataSize() int {
 
 func (ctxt *Context) Flags() int {
 	return int(ctxt.flags)
+}
+
+func (ctxt *Context) AddFlags(flag int) {
+	ctxt.flags |= C.int(flag)
 }
 
 func (ctxt *Context) Flags2() int {

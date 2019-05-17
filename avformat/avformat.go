@@ -21,8 +21,13 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/giorgisio/goav/avcodec"
-	"github.com/giorgisio/goav/avutil"
+	"github.com/slowprog/goav/avcodec"
+	"github.com/slowprog/goav/avutil"
+)
+
+const (
+	AVFMT_NOFILE       = C.AVFMT_NOFILE
+	AVFMT_GLOBALHEADER = C.AVFMT_GLOBALHEADER
 )
 
 type (
@@ -86,6 +91,18 @@ func (f *InputFormat) AvIformatNext() *InputFormat {
 //If f is NULL, returns the first registered output format, if f is non-NULL, returns the next registered output format after f or NULL if f is the last one.
 func (f *OutputFormat) AvOformatNext() *OutputFormat {
 	return (*OutputFormat)(C.av_oformat_next((*C.struct_AVOutputFormat)(f)))
+}
+
+func (f *InputFormat) Flags() int {
+	return int(f.flags)
+}
+
+func (f *OutputFormat) Flags() int {
+	return int(f.flags)
+}
+
+func (cntx *Context) AddFlags(flag int) {
+	cntx.flags |= C.int(flag)
 }
 
 //Return the LIBAvFORMAT_VERSION_INT constant.

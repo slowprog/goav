@@ -5,6 +5,7 @@ package avcodec
 
 //#cgo pkg-config: libavcodec
 //#include <libavcodec/avcodec.h>
+//#include <libavformat/avformat.h>
 import "C"
 
 const (
@@ -36,4 +37,6 @@ const (
 	AV_CODEC_FLAG2_EXPORT_MVS          = int(C.AV_CODEC_FLAG2_EXPORT_MVS)
 	AV_CODEC_FLAG2_SKIP_MANUAL         = int(C.AV_CODEC_FLAG2_SKIP_MANUAL)
 	AV_CODEC_FLAG2_RO_FLUSH_NOOP       = int(C.AV_CODEC_FLAG2_RO_FLUSH_NOOP)
+
+	AVFMT_FLAG_GENPTS = int(C.AVFMT_FLAG_GENPTS)
 )

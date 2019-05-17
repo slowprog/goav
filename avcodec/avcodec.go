@@ -17,6 +17,8 @@ package avcodec
 import "C"
 import (
 	"unsafe"
+
+	"github.com/slowprog/goav/avutil"
 )
 
 type (
@@ -280,4 +282,12 @@ func AvcodecDescriptorGetByName(n string) *Descriptor {
 
 func (f *Frame) Pts() int64 {
 	return int64(f.pts)
+}
+
+func (f *Frame) PictType() avutil.AvPictureType {
+	return (avutil.AvPictureType)(f.pict_type)
+}
+
+func AvcodecParametersCopy(dst *AvCodecParameters, src *AvCodecParameters) int {
+	return int(C.avcodec_parameters_copy((*C.struct_AVCodecParameters)(unsafe.Pointer(dst)), (*C.struct_AVCodecParameters)(unsafe.Pointer(src))))
 }
